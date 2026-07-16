@@ -31,7 +31,10 @@ The goal of the project is to bridge physical motion control and digital design 
 
 | Hardware View       | Drawing Interface           | Motion System          |
 | ------------------- | --------------------------- | ---------------------- |
-|                     |                             |          <img width="1150" height="535" alt="Screenshot 2026-07-16 at 1 47 42 PM" src="https://github.com/user-attachments/assets/98c9bf7f-b3be-485a-a1a7-c76cff52e2d1" />
+| <img width="1680" height="2240" alt="IMG_7486" src="https://github.com/user-attachments/assets/c67b0878-b89c-4e91-b804-1cb8e85571b2" />
+          |<img width="316" height="324" alt="Screenshot 2026-07-16 at 2 42 24 PM" src="https://github.com/user-attachments/assets/726d7f56-df82-41b1-82ef-733352fb688d" />
+                             | 
+  <img width="1150" height="535" alt="Screenshot 2026-07-16 at 1 47 42 PM" src="https://github.com/user-attachments/assets/98c9bf7f-b3be-485a-a1a7-c76cff52e2d1" />
               | 
 | ------------------- | --------------------------- | ---------------------- |
 | Physical XY plotter | Live computer visualization | Stepper motor assembly |
