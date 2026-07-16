@@ -43,6 +43,18 @@
 #define ACCELERATION     500
 
 
+
+// ==============================
+// STEPS TO COORDINATE
+// ==============================
+
+// Change this depending on your motor setup
+// Example: 200 step motor with 16x microstepping = 3200 steps/rev
+
+#define STEPS_PER_PIXEL  1
+
+
+
 // ==============================
 // CREATE STEPPERS
 // ==============================
@@ -59,6 +71,14 @@ AccelStepper YMotor(
   Y_STEP_PIN,
   Y_DIR_PIN
 );
+
+
+
+// ==============================
+// SERIAL TIMER
+// ==============================
+
+unsigned long lastPrint = 0;
 
 
 
@@ -84,23 +104,30 @@ void setup()
 
   pinMode(ENABLE_PIN, OUTPUT);
 
-  // A4988 enable is active LOW
+  // A4988 enable active LOW
   digitalWrite(ENABLE_PIN, LOW);
 
 
 
-  // Motor configuration
+  // Motor settings
 
   XMotor.setMaxSpeed(MAX_SPEED);
   YMotor.setMaxSpeed(MAX_SPEED);
-
 
   XMotor.setAcceleration(ACCELERATION);
   YMotor.setAcceleration(ACCELERATION);
 
 
 
+  // Start at top left
+
+  XMotor.setCurrentPosition(0);
+  YMotor.setCurrentPosition(0);
+
+
+
   Serial.println("XY Plotter Ready");
+  Serial.println("(0,0)");
 }
 
 
@@ -112,54 +139,85 @@ void setup()
 void loop()
 {
 
-  int xMovement = 0;
-  int yMovement = 0;
+  int xSpeed = 0;
+  int ySpeed = 0;
 
 
 
   // =====================
-  // READ BUTTONS
+  // BUTTON INPUT
   // =====================
 
+
+  // Right = X increases
 
   if(!digitalRead(BTN_RIGHT))
   {
-    xMovement = MAX_SPEED;
+    xSpeed = MAX_SPEED;
   }
 
+
+  // Left = X decreases
 
   if(!digitalRead(BTN_LEFT))
   {
-    xMovement = -MAX_SPEED;
+    xSpeed = -MAX_SPEED;
   }
 
 
 
-  if(!digitalRead(BTN_UP))
-  {
-    yMovement = MAX_SPEED;
-  }
-
+  // Down = Y increases
 
   if(!digitalRead(BTN_DOWN))
   {
-    yMovement = -MAX_SPEED;
+    ySpeed = MAX_SPEED;
+  }
+
+
+  // Up = Y decreases
+
+  if(!digitalRead(BTN_UP))
+  {
+    ySpeed = -MAX_SPEED;
   }
 
 
 
   // =====================
-  // COMMAND MOTORS
+  // MOTOR CONTROL
   // =====================
 
-  XMotor.setSpeed(xMovement);
-  YMotor.setSpeed(yMovement);
+  XMotor.setSpeed(xSpeed);
+  YMotor.setSpeed(ySpeed);
 
-
-
-  // Must constantly run
 
   XMotor.runSpeed();
   YMotor.runSpeed();
+
+
+
+
+  // =====================
+  // OUTPUT COORDINATES
+  // =====================
+
+  if(millis() - lastPrint > 200)
+  {
+
+    long xCoordinate = XMotor.currentPosition() / STEPS_PER_PIXEL;
+    long yCoordinate = YMotor.currentPosition() / STEPS_PER_PIXEL;
+
+
+    Serial.print("(");
+    Serial.print(xCoordinate);
+    Serial.print(",");
+    Serial.print(yCoordinate);
+    Serial.println(")");
+
+
+
+    lastPrint = millis();
+
+  }
 
 }
