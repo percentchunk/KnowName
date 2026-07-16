@@ -20,7 +20,7 @@ The goal of this project is to bridge physical motion control and digital design
 - NEMA 17 stepper motors
 - Manual directional controls
 - Real-time coordinate tracking
-- USB serial communication with computer
+- serial communication with computer
 - Live drawing visualization
 - Vector drawing export (SVG)
 - CNC-style motion control
