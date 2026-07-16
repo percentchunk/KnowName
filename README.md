@@ -8,7 +8,7 @@ This project started as a simple two-axis stepper motor controller, but it was e
 
 The device uses an ESP32-S3 to process user inputs and control two NEMA 17 stepper motors. The firmware manages motor movement, tracks the current X/Y position, and continuously sends coordinate data through USB serial in theroy. 
 
-A computer application receives the coordinate stream and converts the movement into a live digital drawing. Each point from the physical plotter is represented digitally, allowing the drawing process to be monitored, stored, and exported.
+A computer application receives the coordinate stream and converts the movement into a live digital drawing. 
 
 The goal of this project is to bridge physical motion control and digital design by creating a machine that can both draw and communicate its movement data.
 
