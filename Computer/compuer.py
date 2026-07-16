@@ -3,15 +3,27 @@ import time
 import svgwrite as draw
 from difflib import SequenceMatcher
 import cv2
-import cairosvg
+import subprocess
 
 def display_imgs(svg1_path, svg2_path, percent):
         # Load the background and foreground images
-    cairosvg.svg2png(url="Computer/output/output.svg",
-                 write_to="Computer/output/output.png")
+        
+    subprocess.run([
+        "inkscape",
+        "Computer/reference/reference.svg",
+        "--export-type=png",
+        "--export-dpi=384",
+        "--export-filename=Computer/reference/reference.png"
+    ], check=True)
 
-    cairosvg.svg2png(url="Computer/reference/reference.svg",
-                 write_to="Computer/reference/reference.png")
+    subprocess.run([
+    "inkscape",
+    "Computer/output/output.svg",
+    "--export-type=png",
+    "--export-dpi=384",
+    "--export-filename=Computer/output/output.png"
+    ], check=True)
+
     bg = cv2.imread("Computer/reference/reference.png")
     fg = cv2.imread("Computer/output/output.png")
 
@@ -39,15 +51,38 @@ def display_imgs(svg1_path, svg2_path, percent):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def update_svg(data, dwg0): 
-    # Example: Draw a simple line based on the received data
-    # Assuming data is a string of coordinates like "x1,y1,x2,y2
-    coords = list(map(int, data.split(',')))
-    if len(coords) == 4:
-        dwg.add(dwg.line(start=(coords[0], coords[1]), end=(coords[2], coords[3]), stroke=draw.rgb(10, 10, 16, '%')))
-    # Save the SVG file
-    dwg.save()
+def update_svg(data, dwg):
+    scale = 2  # Scale all coordinates by 2
 
+    try:
+        coords = list(map(int, data.split(',')))
+
+        # Need at least two points (4 numbers)
+        if len(coords) < 4 or len(coords) % 2 != 0:
+            print("Invalid coordinate list")
+            return
+
+        # Convert flat list into (x, y) tuples and scale them
+        points = [
+            (coords[i] * scale, coords[i + 1] * scale)
+            for i in range(0, len(coords), 2)
+        ]
+
+        # Draw a continuous polyline
+        dwg.add(
+            dwg.polyline(
+                points=points,
+                stroke="black",
+                stroke_width=2,
+                fill="none"
+            )
+        )
+
+        dwg.save()
+
+    except ValueError:
+        print("Received invalid coordinate data")
+        
     percent = compare_svgs('Computer/output/output.svg', 'Computer/reference/reference.svg')  # Compare with a reference SVG
     display_imgs('Computer/output/output.svg', 'Computer/reference/reference.svg', percent)  # Display the image after updating the SVG
 
@@ -67,7 +102,7 @@ def compare_svgs(svg1_path, svg2_path):
 # Replace 'COM3' with your actual port (e.g., '/dev/ttyUSB0' on Linux/Mac)
 SERIAL_PORT = 'COM3' 
 BAUD_RATE = 115200
-data =   "0,0,1,0,1,1,0,1"  # List to store received data
+data =   "0,0,10,0,100,10,0,100"  # List to store received data
 dwg = draw.Drawing('Computer/output/output.svg', profile='tiny') # create .svg file
 
 
