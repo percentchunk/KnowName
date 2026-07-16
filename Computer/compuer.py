@@ -3,11 +3,17 @@ import time
 import svgwrite as draw
 from difflib import SequenceMatcher
 import cv2
+import cairosvg
 
 def display_imgs(svg1_path, svg2_path, percent):
         # Load the background and foreground images
-    bg = cv2.imread(svg2_path)
-    fg = cv2.imread(svg1_path)
+    cairosvg.svg2png(url="Computer/output/output.svg",
+                 write_to="Computer/output/output.png")
+
+    cairosvg.svg2png(url="Computer/reference/reference.svg",
+                 write_to="Computer/reference/reference.png")
+    bg = cv2.imread("Computer/reference/reference.png")
+    fg = cv2.imread("Computer/output/output.png")
 
     # Both images must have identical dimensions; resize fg to match bg if needed
     fg_resized = cv2.resize(fg, (bg.shape[1], bg.shape[0]))
@@ -33,7 +39,7 @@ def display_imgs(svg1_path, svg2_path, percent):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-def update_svg(data): 
+def update_svg(data, dwg0): 
     # Example: Draw a simple line based on the received data
     # Assuming data is a string of coordinates like "x1,y1,x2,y2
     coords = list(map(int, data.split(',')))
@@ -42,8 +48,8 @@ def update_svg(data):
     # Save the SVG file
     dwg.save()
 
-    percent = compare_svgs('output/output.svg', 'reference/reference.svg')  # Compare with a reference SVG
-    display_imgs('output/output.svg', 'reference/reference.svg', percent)  # Display the image after updating the SVG
+    percent = compare_svgs('Computer/output/output.svg', 'Computer/reference/reference.svg')  # Compare with a reference SVG
+    display_imgs('Computer/output/output.svg', 'Computer/reference/reference.svg', percent)  # Display the image after updating the SVG
 
 def compare_svgs(svg1_path, svg2_path):
     with open(svg1_path, 'r') as file1, open(svg2_path, 'r') as file2:
@@ -61,14 +67,15 @@ def compare_svgs(svg1_path, svg2_path):
 # Replace 'COM3' with your actual port (e.g., '/dev/ttyUSB0' on Linux/Mac)
 SERIAL_PORT = 'COM3' 
 BAUD_RATE = 115200
+data =   "0,0,1,0,1,1,0,1"  # List to store received data
+dwg = draw.Drawing('Computer/output/output.svg', profile='tiny') # create .svg file
+
 
 try:
     # Open the serial port with a 1-second timeout
     ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
     print(f"Connected to ESP32 on {SERIAL_PORT}")
     
-    data = []  # List to store received data
-    dwg = draw.Drawing('output/output.svg', profile='tiny') # create .svg file
 
     # Brief pause to allow the connection to settle
     time.sleep(2) 
@@ -79,11 +86,11 @@ try:
             raw_data = ser.readline()
             
             # Decode bytes to a string and strip whitespace/newlines
-            decoded_data = raw_data.decode('utf-8').rstrip()
+            data = raw_data.decode('utf-8').rstrip()
             
-            print(f"Received: {decoded_data}")
+            print(f"Received: {data}")
 
-            data.append(decoded_data)  # Store the received data for later use
+            data.append(data)  # Store the received data for later use
             
 except serial.SerialException as e:
     print(f"Error connecting to serial port: {e}")
@@ -95,5 +102,5 @@ finally:
         ser.close()
         print("Serial port closed.")
 
-    update_svg(decoded_data)  # Update the SVG with the latest data
-    display_imgs('output/output.svg', 'reference/reference.svg', "0.00")  # Initial display with 0% similarity
+    update_svg(data, dwg)  # Update the SVG with the latest data
+    display_imgs('Computer/output/output.svg', 'Computer/reference/reference.svg', "0.00")  # Initial display with 0% similarity
