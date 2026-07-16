@@ -16,14 +16,14 @@ The goal of this project is to bridge physical motion control and digital design
 
 - ESP32-S3 based motion controller
 - Two-axis X/Y stepper motor system
-- Dual A4988 stepper motor drivers
+- Dual A4988 stepper motor drivers(lowkey did not work as much)
 - NEMA 17 stepper motors
 - Manual directional controls
 - Real-time coordinate tracking
 - USB serial communication with computer
 - Live drawing visualization
 - Vector drawing export (SVG)
-- CNC-style motion control architecture
+- CNC-style motion control
 
 ## Demonstrations
 
@@ -49,11 +49,11 @@ Demonstration of the computer visualization interface, showing live coordinate s
 
 ## How It Works
 
-The directional buttons send movement commands to the ESP32-S3.
+The directional buttons sends movement commands to the ESP32-S3.
 
 The ESP32 processes the inputs and generates STEP and DIR signals for the A4988 motor drivers. These drivers control the X and Y NEMA 17 stepper motors, allowing precise movement along two axes.
 
-While the motors are moving, the ESP32 tracks the current motor position and sends the coordinates over USB serial.
+While the motors are moving, the ESP32 tracks the current position and sends the coordinates over serial.
 
 Example output:
 
