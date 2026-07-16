@@ -1,6 +1,6 @@
-# ESP32 XY Plotter
+# Plotopia Plotter
 
-The ESP32 XY Plotter is a two-axis drawing machine built around an ESP32-S3 microcontroller. It uses stepper motors and A4988 drivers to achieve precise X/Y movement while streaming live coordinate data to a computer.
+The Plotopia Plotter is a two-axis drawing machine built around an ESP32-S3 microcontroller. It uses stepper motors and A4988 drivers to achieve precise X/Y movement while streaming live coordinate data to a computer.
 
 ## Overview
 
