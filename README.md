@@ -38,7 +38,7 @@ Demonstration of the physical XY plotter, including the ESP32-S3 controller, ste
 
 Demonstration of the computer visualization interface, showing live coordinate streaming, drawing reconstruction, and digital output.
 
-[Interface Demo](PLACEHOLDER_LINK)
+[Interface Demo](https://youtube.com/shorts/HziSjeg9duM?feature=share)
 
 ## Project Views
 
