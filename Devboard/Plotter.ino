@@ -7,8 +7,8 @@
 
 #define BTN_UP       1
 #define BTN_DOWN     2
-#define BTN_LEFT     3
-#define BTN_RIGHT    42
+#define BTN_LEFT     42
+#define BTN_RIGHT    41
 
 
 // ==============================
