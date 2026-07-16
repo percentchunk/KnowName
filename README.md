@@ -21,10 +21,9 @@ The goal of this project is to bridge physical motion control and digital design
 - Dual A4988 stepper motor drivers
 - Manual directional controls
 - Real-time coordinate tracking
-- USB serial communication with computer
 - Live drawing visualization
 - Vector drawing export (SVG)
-- CNC-style motion control architecture
+- CNC-style motion control system
 
 ## Project Views
 
@@ -40,6 +39,8 @@ The directional buttons send movement commands to the ESP32.
 The ESP32 processes the inputs and generates STEP and DIR signals for the A4988 motor drivers. These drivers control the X and Y stepper motors, allowing precise movement along two axes.
 
 While the motors are moving, the ESP32 tracks the current motor position and sends the coordinates over USB serial.
+
+this is so that we can turn it into a game for others to attempt to gain as high as a similarity as we can. 
 
 Example output:
 
